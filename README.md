@@ -2,89 +2,109 @@
 
 ## 📌 Project Overview
 
-This project simulates a real-world **enterprise Active Directory environment** monitored from a **Security Operations Center (SOC)** perspective.
+This project simulates a real-world enterprise **Active Directory environment** monitored from a Security Operations Center (SOC) perspective.
 
-The lab is designed to understand:
-
-- Active Directory infrastructure setup  
-- Centralized log collection  
-- SIEM integration  
-- Attack simulation  
-- Threat detection & analysis  
-
-The environment replicates common enterprise attack scenarios such as brute-force attempts, unauthorized logins, privilege escalation, and lateral movement within a domain network.
+The lab demonstrates domain setup, centralized log collection, SIEM integration, attack simulation, and threat detection within a controlled environment.
 
 ---
 
-## 🏗️ Lab Architecture
+## 🌐 Network & Domain Information
 
-### 🌐 Domain Information
+- **Domain Name:** MyDomain  
+- **Network Range:** 192.168.10.0/24  
 
-- **Domain Name:** MyDFIR  
-- **Network:** 192.168.10.0/24  
+### 🖥️ Lab Machines
 
-### 🖥️ Machines in the Lab
-
-| Machine | Role | IP Address |
-|----------|------|------------|
-| Splunk Server | SIEM | 192.168.10.10 |
+| System | Role | IP Address |
+|--------|------|------------|
+| Splunk Server | SIEM Server | 192.168.10.10 |
 | Active Directory Server | Domain Controller | 192.168.10.7 |
 | Windows 10 | Domain Client | DHCP |
 | Kali Linux | Attacker Machine | 192.168.10.250 |
 
 ---
 
+## 🏗️ Architecture Overview
+
+- Active Directory Server acts as the **Domain Controller**.
+- Windows 10 machine is joined to the domain.
+- Splunk Server collects and analyzes logs.
+- Kali Linux is used to simulate attacks.
+- Sysmon and Splunk Universal Forwarder are installed on endpoints.
+- All machines are connected within the subnet `192.168.10.0/24`.
+
+---
+
 ## 🛠️ Technologies Used
 
 - Windows Server (Active Directory Domain Services)
-- Windows 10 Client
+- Windows 10
 - Splunk Enterprise
 - Splunk Universal Forwarder
 - Sysmon
 - Kali Linux
-- VirtualBox (Hypervisor)
+- VirtualBox
 
 ---
 
 ## 🔄 Project Workflow
 
 ### 1️⃣ Active Directory Setup
-- Installed and configured **Active Directory Domain Services (AD DS)**.
-- Created domain: `MyDFIR.local`
-- Added users, groups, and applied basic domain policies.
+
+- Installed and configured Active Directory Domain Services.
+- Created domain: `MyDomain.local`
+- Created users and groups.
 - Joined Windows 10 client to the domain.
+- Configured basic Group Policies.
+
+---
 
 ### 2️⃣ Log Collection Configuration
-- Installed **Sysmon** on:
+
+- Installed Sysmon on:
   - Active Directory Server
   - Windows 10 Client
-- Installed **Splunk Universal Forwarder** on both systems.
+- Installed Splunk Universal Forwarder on both systems.
 - Configured log forwarding to Splunk Server (192.168.10.10).
+- Forwarded:
+  - Windows Security Logs
+  - System Logs
+  - Sysmon Logs
+
+---
 
 ### 3️⃣ SIEM Configuration (Splunk)
-- Configured receiving port for forwarders.
+
+- Enabled receiving port for forwarders.
 - Created indexes for Windows and Sysmon logs.
 - Built dashboards for:
-  - Failed login attempts
-  - Successful logins
+  - Failed logins (Event ID 4625)
+  - Successful logins (Event ID 4624)
+  - Special privileges assigned (Event ID 4672)
   - Account lockouts
   - Suspicious PowerShell execution
-  - Privilege escalation activity
 
-### 4️⃣ Attack Simulation (Kali Linux)
-Simulated common attack techniques such as:
+---
+
+### 4️⃣ Attack Simulation (Kali Linux – 192.168.10.250)
+
+Simulated attack scenarios such as:
 
 - Brute-force login attempts
 - Password spraying
-- Enumeration of domain users
-- Suspicious authentication attempts
+- User enumeration
+- Unauthorized authentication attempts
 - Lateral movement testing
 
+---
+
 ### 5️⃣ Detection & Monitoring
-- Monitored Event IDs (4624, 4625, 4672, etc.)
-- Correlated Sysmon logs with Windows Security logs
-- Identified suspicious IP activity (192.168.10.250)
-- Analyzed attack patterns in Splunk dashboards
+
+- Monitored authentication events.
+- Correlated Sysmon process logs with Security logs.
+- Detected suspicious login patterns from attacker IP.
+- Analyzed privileged account usage.
+- Investigated abnormal behavior using Splunk dashboards.
 
 ---
 
@@ -92,25 +112,25 @@ Simulated common attack techniques such as:
 
 - Multiple failed logins from single IP
 - Account lockout detection
-- Admin privilege logins
-- Suspicious PowerShell execution
-- Unusual logon hours
-- New user account creation
-- Remote logon monitoring (RDP events)
+- Admin privilege monitoring
+- Suspicious process creation (Sysmon Event ID 1)
+- Remote logon monitoring (RDP)
+- New user account creation tracking
 
 ---
 
-## 🎯 Learning Outcomes
+## 🎯 Skills Demonstrated
 
-- Practical understanding of Active Directory security
-- Hands-on SIEM log ingestion and analysis
-- Real-world attack simulation and detection
-- SOC-level monitoring and investigation workflow
-- Event log analysis and threat correlation
+- Active Directory Administration
+- SIEM Log Analysis
+- Windows Event Log Investigation
+- Threat Detection & Correlation
+- SOC Monitoring Workflow
+- Attack Simulation & Blue Team Analysis
 
 ---
 
 ## 👩‍💻 Author
 Tanushka Kumbhar
-Final Year B.Tech Computer Science Student  
-Aspiring SOC Analyst | Blue Team Enthusiast  
+Final Year B.Tech Computer Engineering Student  
+Aspiring SOC Analyst
